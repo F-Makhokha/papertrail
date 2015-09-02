@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StorageProvider.cs" />
-    <Compile Include="VisionHelper.cs" />
+    <Compile Include="VisionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

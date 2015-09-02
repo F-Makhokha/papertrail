@@ -6,7 +6,7 @@ using Microsoft.ProjectOxford.Vision.Contract;
 
 namespace PaperTrail
 {
-    public class VisionHelper
+    public class VisionProvider
     {
         /// <summary>
         /// The vision service client.
@@ -14,10 +14,10 @@ namespace PaperTrail
         private readonly IVisionServiceClient _visionClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VisionHelper"/> class.
+        /// Initializes a new instance of the <see cref="VisionProvider"/> class.
         /// </summary>
         /// <param name="subscriptionKey">The subscription key.</param>
-        public VisionHelper(string subscriptionKey)
+        public VisionProvider(string subscriptionKey)
         {
             this._visionClient = new VisionServiceClient(subscriptionKey);
         }

@@ -35,6 +35,7 @@ namespace api
             services.AddMvc();
             //services.AddSingleton<StorageProvider>();
             services.AddSingleton(provider => new StorageProvider(Configuration.Get("Data:DefaultConnection:ConnectionString")));
+            services.AddSingleton(provider => new VisionProvider(Configuration.Get("Data:Oxford:VisionSubscriptionKey")));
 
             // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.

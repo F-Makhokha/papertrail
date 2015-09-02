@@ -44,7 +44,7 @@ namespace api.Controllers
             var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
 
             var fileName = parsedContentDisposition.FileName.Replace("\"", "");
-            var uri = await _storageProvider.UploadAsync(fileName, file.OpenReadStream());
+            var uri = await _storageProvider.UploadAsync("test", fileName, file.OpenReadStream());
 
             return Created(Request.Path, uri.AbsoluteUri);
         }
