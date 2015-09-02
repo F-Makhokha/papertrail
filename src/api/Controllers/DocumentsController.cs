@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http;
 using Microsoft.Net.Http.Headers;
@@ -33,7 +34,7 @@ namespace api.Controllers
         // POST api/values
         [HttpPost]
         //[Produces("application/json", Type = typeof())]
-        public IActionResult Post(IFormFile file)
+        public async Task<IActionResult> Post(IFormFile file)
         {
             if (file == null)
             {
@@ -42,8 +43,10 @@ namespace api.Controllers
 
             var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
 
-            _storageProvider.Upload(parsedContentDisposition.Name, file.OpenReadStream());
-            return Content(parsedContentDisposition.Name);
+            var fileName = parsedContentDisposition.FileName.Replace("\"", "");
+            var uri = await _storageProvider.UploadAsync(fileName, file.OpenReadStream());
+
+            return Created(Request.Path, uri.AbsoluteUri);
         }
 
         // PUT api/values/5

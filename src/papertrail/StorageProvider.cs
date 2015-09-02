@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Microsoft.Azure;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -19,18 +19,20 @@ namespace PaperTrail
             _storageAccount = CloudStorageAccount.Parse(_connectionStr);
         }
 
-        public void Upload(string blobName, Stream stream)
+        public async Task<Uri> UploadAsync(string blobName, Stream stream)
         {
+            if (String.IsNullOrEmpty(blobName))
+            {
+                throw new ArgumentNullException(nameof(blobName));
+            }
+
             var container = BlobClient().GetContainerReference("test");
-            container.CreateIfNotExists();
+            await container.CreateIfNotExistsAsync();
 
             var blockBlob = container.GetBlockBlobReference(blobName);
-            blockBlob.UploadFromStream(stream);
-            // Create or overwrite the "myblob" blob with contents from a local file.
-            using (var fileStream = System.IO.File.OpenRead(@"path\myfile"))
-            {
-                blockBlob.UploadFromStream(fileStream);
-            }
+            await blockBlob.UploadFromStreamAsync(stream);
+
+            return blockBlob.Uri;
         }
     }
 }
