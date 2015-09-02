@@ -1,19 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using PaperTrail;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Routing;
+using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
+using Microsoft.Framework.Runtime;
 
 namespace api
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public IConfiguration Configuration { get; set; }
+
+        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
+            var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath);
+            builder.AddJsonFile("config.json");
+            builder.AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
+
+            if (env.IsEnvironment("Development"))
+            {
+                // This reads the configuration keys from the secret store.
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                //configuration.AddUserSecrets();
+            }
+            builder.AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
 
         // This method gets called by a runtime.
@@ -21,6 +33,9 @@ namespace api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            //services.AddSingleton<StorageProvider>();
+            services.AddSingleton(provider => new StorageProvider(Configuration.Get("Data:DefaultConnection:ConnectionString")));
+
             // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
             // services.AddWebApiConventions();
