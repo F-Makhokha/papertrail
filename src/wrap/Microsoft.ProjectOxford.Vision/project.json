@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net45+wp80": {
+      "wrappedProject": "../../external/Vision-SDK-CSharp/ClientLibrary/Microsoft.ProjectOxford.Vision.csproj",
+      "bin": {
+        "assembly": "../../external/Vision-SDK-CSharp/ClientLibrary/obj/{configuration}/Microsoft.ProjectOxford.Vision.dll",
+        "pdb": "../../external/Vision-SDK-CSharp/ClientLibrary/obj/{configuration}/Microsoft.ProjectOxford.Vision.pdb"
+      },
+      "dependencies": {
+        "Newtonsoft.Json": "6.0.8"
+      }
+    }
+  }
+}
